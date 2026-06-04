@@ -449,15 +449,14 @@
         \fill[hhuGold] ([xshift=0.20\paperwidth]current page.north west) rectangle ([xshift=0.205\paperwidth,yshift=-1.34cm]current page.north west);
         \node[anchor=west, inner sep=0pt, text=white, font=\HHUBrandFont\bfseries\fontsize{7.4}{8.6}\selectfont] at ([xshift=0.34cm,yshift=-0.56cm]current page.north west)
             {HOHAI UNIVERSITY};
+        \node[anchor=west, inner sep=0pt, align=left, text width=0.68\paperwidth] at ([xshift=0.265\paperwidth,yshift=-0.59cm]current page.north west) {%
+            \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle%
+            \ifx\insertframesubtitle\empty\else\\[-1pt]%
+            {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}%
+            \fi%
+        };
     \end{tikzpicture}
-    \vspace*{-0.02cm}
-    \begin{beamercolorbox}[wd=\textwidth, ht=1.12cm, dp=0.12cm]{frametitle}
-        \hspace*{3.50cm}%
-        \begin{minipage}{0.70\paperwidth}
-            \usebeamerfont{frametitle}\insertframetitle\\[-1pt]
-            {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
-        \end{minipage}
-    \end{beamercolorbox}
+    \vspace*{1.13cm}
 }
 
 % title page
