@@ -1,0 +1,217 @@
+\documentclass{beamer}
+\usepackage[hhu,en]{collegebeamer}
+
+\title[HHU Beamer Template]{Hohai University Beamer Template}
+\subtitle{Clean Academic Slides for Research Talks}
+\author{Presenter: Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Design Direction}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \begin{block}{Core Principle}
+                A restrained academic theme: clear hierarchy, generous whitespace, and formal university branding.
+            \end{block}
+            \begin{itemize}
+                \item Hohai blue for structure and navigation
+                \item Warm gold for section breaks and emphasis
+                \item Light water-tone backgrounds for content panels
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{center}
+                \includegraphics[width=0.72\textwidth]{assets/hhu/color-logo.png}
+            \end{center}
+            \vspace{6pt}
+            \begin{exampleblock}{Best Fit}
+                Seminars, defenses, lectures, and research group meetings.
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Theme System}
+
+\begin{frame}{Table of Contents}
+    \tableofcontents
+\end{frame}
+
+\begin{frame}{Visual Language}
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \ctextbf{Typography}
+            \begin{itemize}
+                \item Sans-serif interface for modern projection
+                \item Bold frame titles with compact subtitles
+                \item Readable block body text, no microtype feel
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \ctextbf{Color Roles}
+            \begin{itemize}
+                \item \ctextbf{Blue}: navigation and primary claims
+                \item \textbf{\textcolor{hhuCyan}{Cyan}}: examples and secondary cues
+                \item \textbf{\textcolor{hhuGold}{Gold}}: attention and transitions
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \vspace{10pt}
+    \begin{center}
+        \begin{tikzpicture}
+            \foreach \x/\col/\lab in {
+                0/maincolor/Hohai Blue,
+                3.2/hhuCyan/Water Cyan,
+                6.4/hhuGold/Warm Gold,
+                9.6/hhuMist/Mist Panel} {
+                \fill[\col] (\x,0) rectangle ++(2.2,0.62);
+                \draw[hhuLine] (\x,0) rectangle ++(2.2,0.62);
+                \node[below=4pt, font=\small] at (\x+1.1,0) {\lab};
+            }
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Information Architecture}
+    \begin{center}
+        \begin{tikzpicture}[
+            box/.style={draw=hhuLine, fill=hhuMist, rounded corners=1pt,
+                        minimum width=2.8cm, minimum height=0.82cm,
+                        align=center, font=\small},
+            key/.style={draw=maincolor, fill=maincolor, text=white,
+                        rounded corners=1pt, minimum width=2.8cm,
+                        minimum height=0.82cm, align=center, font=\small\bfseries},
+            arr/.style={-{Stealth}, thick, maincolor}
+        ]
+            \node[key] (A) {Problem};
+            \node[box, right=1.0cm of A] (B) {Method};
+            \node[box, right=1.0cm of B] (C) {Evidence};
+            \node[box, right=1.0cm of C] (D) {Takeaway};
+            \draw[arr] (A) -- (B);
+            \draw[arr] (B) -- (C);
+            \draw[arr] (C) -- (D);
+        \end{tikzpicture}
+    \end{center}
+    \vspace{8pt}
+    \begin{alertblock}{Slide Rhythm}
+        One dominant message per frame; formulas, diagrams, and tables support the argument directly.
+    \end{alertblock}
+\end{frame}
+
+\section{Academic Components}
+
+\begin{frame}{Mathematical Expression}
+    \begin{block}{Regularized Objective}
+        \begin{equation*}
+            \min_{\theta} \; \mathcal{L}(\theta)
+            =
+            \frac{1}{n}\sum_{i=1}^{n}
+            \left(y_i - f(x_i;\theta)\right)^2
+            + \lambda \lVert \theta \rVert_2^2
+        \end{equation*}
+    \end{block}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \ctextbf{Data fit}
+            \begin{itemize}
+                \item Average prediction error
+                \item Directly tied to observations
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \ctextbf{Complexity control}
+            \begin{itemize}
+                \item Penalizes unstable parameters
+                \item Supports reproducible inference
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Table Example}
+    \vspace{4pt}
+    \begin{center}
+        \begin{tabular}{lcc}
+            \toprule
+            Module & Input & Output \\
+            \midrule
+            Data layer & Raw observations & Clean samples \\
+            Model layer & Feature matrix & Parameter estimates \\
+            Evaluation layer & Predictions & Metric report \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \vspace{8pt}
+    \begin{exampleblock}{Table Style}
+        Use \texttt{booktabs}; avoid vertical rules and dense grid lines on slides.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Two-Column Layout}
+    \begin{columns}[T]
+        \begin{column}{0.47\textwidth}
+            \begin{block}{Problem Definition}
+                \begin{itemize}
+                    \item Research context
+                    \item Key constraints
+                    \item Main variables
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            \begin{exampleblock}{Method Framework}
+                \begin{equation*}
+                    y = f(x;\theta) + \epsilon
+                \end{equation*}
+                \begin{itemize}
+                    \item Transparent model structure
+                    \item Reproducible evaluation pipeline
+                \end{itemize}
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Summary}
+
+\begin{frame}{What Changed}
+    \begin{columns}[T]
+        \begin{column}{0.50\textwidth}
+            \ctextbf{Theme Layer}
+            \begin{itemize}
+                \item Rebuilt title page and Q\&A page
+                \item Rebalanced frame title and footer
+                \item Modernized blocks, bullets, and code style
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \ctextbf{Usage Layer}
+            \begin{itemize}
+                \item Keep using the \texttt{hhu} package option
+                \item Compile with XeLaTeX
+                \item Store HHU assets in \texttt{assets/hhu/}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{References}
+    \small
+    \begin{thebibliography}{9}
+        \bibitem{collegebeamer}
+        Liu Qilong.
+        \newblock \emph{college-beamer}.
+        \newblock GitHub repository, 2026.
+
+        \bibitem{hhuidentity}
+        Hohai University.
+        \newblock \emph{Visual Identity System Manual}.
+    \end{thebibliography}
+\end{frame}
+
+\QApage
+
+\end{document}

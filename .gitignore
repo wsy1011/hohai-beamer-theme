@@ -1,0 +1,32 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.gz
+*.ist
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+
+# Generated presentation outputs
+*.pdf
+preview/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

@@ -1,0 +1,574 @@
+\ProvidesPackage{collegebeamer}
+
+% required packages
+\RequirePackage{etoolbox}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\RequirePackage{listings}
+\RequirePackage{graphicx}
+\RequirePackage{geometry}
+\RequirePackage{booktabs}
+\RequirePackage{amsfonts, amsmath, bm, oldgerm}  % math
+\RequirePackage{verbatim}
+\RequirePackage{animate}
+\RequirePackage{xcolor}
+\RequirePackage{ifplatform}
+\RequirePackage{fontspec}
+
+% --- package options ---
+% languages
+\newcommand{\tocStr}{Table of Contents}
+\newcommand{\qaStr}{\textsl{Thank you for listening! \\ Your feedback will be highly appreciated!}}
+
+\DeclareOption{en}{
+    \renewcommand{\tocStr}{Table of Contents}
+    \renewcommand{\qaStr}{\textsl{Thank you for listening! \\ Your feedback will be highly appreciated!}}
+}
+
+\newif\ifcollegebeamer@zh
+
+% Chinese option
+\DeclareOption{zh}{%
+  \collegebeamer@zhtrue
+  \AtEndOfPackage{%
+    \RequirePackage{ifxetex}
+    \RequirePackage{xeCJK}
+    
+    % os specific font setting
+    \ifwindows
+        \setCJKmainfont{Microsoft YaHei}
+        \setCJKsansfont{Microsoft YaHei}
+        \setCJKmonofont{Microsoft YaHei}
+    \fi
+    \ifmacosx
+        \setCJKmainfont{Songti SC}
+    \fi
+    \iflinux
+        \setCJKmainfont{Noto Serif CJK SC}
+    \fi
+
+    \renewcommand{\tocStr}{Table of Contents}
+    \renewcommand{\qaStr}{\textbf{Thank you for listening and for your feedback.}}
+    \ifxetex
+    \else
+      \PackageError{collegebeamer}{Please compile this template with XeLaTeX!}{}
+    \fi
+  }
+}
+
+% colleges & institutes
+\newcommand{\maincolorRGB}{128, 57, 61}
+\newcommand{\colorlogoPath}{src/PolyU/color-logo.png}
+\newcommand{\translogoPath}{src/PolyU/trans-logo.png}
+\newcommand{\backgroundPath}{src/PolyU/background.png}
+\newcommand{\hhuWordmarkPath}{assets/hhu/hhu-wordmark.png}
+\newcommand{\hhuEmblemPath}{assets/hhu/hhu-emblem.png}
+\newcommand{\logoWidth}{0.09}
+\newcommand{\frameTitleLeftSkip}{0.62cm}
+\newcommand{\frameTitleTopVspace}{0ex}
+
+\DeclareOption{polyu}{
+    \renewcommand{\maincolorRGB}{128, 57, 61}
+    \renewcommand{\colorlogoPath}{src/PolyU/color-logo.png}
+    \renewcommand{\translogoPath}{src/PolyU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/PolyU/background.png}
+}
+
+\DeclareOption{szu}{
+    \renewcommand{\maincolorRGB}{124, 36, 64}
+    \renewcommand{\colorlogoPath}{src/SZU/color-logo.pdf}
+    \renewcommand{\translogoPath}{src/SZU/trans-logo.pdf}
+    \renewcommand{\backgroundPath}{src/SZU/background.png}
+}
+
+\DeclareOption{swu}{
+    \renewcommand{\maincolorRGB}{39, 32, 99}
+    \renewcommand{\colorlogoPath}{src/SWU/color-logo.png}
+    \renewcommand{\translogoPath}{src/SWU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/SWU/background.png}
+}
+
+\DeclareOption{heu}{
+    \renewcommand{\maincolorRGB}{2, 77, 162}
+    \renewcommand{\colorlogoPath}{src/HEU/color-logo.png}
+    \renewcommand{\translogoPath}{src/HEU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/HEU/background.pdf}
+}
+
+\DeclareOption{hhu}{
+    \renewcommand{\maincolorRGB}{0, 83, 158}
+    \renewcommand{\colorlogoPath}{assets/hhu/color-logo.png}
+    \renewcommand{\translogoPath}{assets/hhu/trans-logo.png}
+    \renewcommand{\backgroundPath}{assets/hhu/background.png}
+    \renewcommand{\logoWidth}{0.12}
+    \renewcommand{\frameTitleLeftSkip}{0.62cm}
+    \renewcommand{\frameTitleTopVspace}{0ex}
+}
+
+\DeclareOption{hit}{
+    \renewcommand{\maincolorRGB}{42, 101, 128}
+    \renewcommand{\colorlogoPath}{src/HIT/color-logo.png}
+    \renewcommand{\translogoPath}{src/HIT/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/HIT/background.png}
+}
+
+\DeclareOption{saes}{
+    \renewcommand{\maincolorRGB}{5, 103, 81}
+    \renewcommand{\colorlogoPath}{src/SAES/color-logo.png}
+    \renewcommand{\translogoPath}{src/SAES/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/SAES/background.png}
+}
+
+\DeclareOption{zafu}{
+    \renewcommand{\maincolorRGB}{0, 133, 75}
+    \renewcommand{\colorlogoPath}{src/ZAFU/color-logo.png}
+    \renewcommand{\translogoPath}{src/ZAFU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/ZAFU/background.png}
+}
+
+\DeclareOption{red}{
+    \renewcommand{\maincolorRGB}{128, 57, 61}
+    \renewcommand{\colorlogoPath}{src/Red/color-logo.png}
+    \renewcommand{\translogoPath}{src/Red/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/Red/background.png}
+    \renewcommand{\qaStr}{\textbf{Workers of the world, unite!}}
+}
+
+\DeclareOption{nwpu}{
+	\renewcommand{\maincolorRGB}{34, 54, 102}
+	\renewcommand{\colorlogoPath}{src/NWPU/color-logo.png}
+	\renewcommand{\translogoPath}{src/NWPU/trans-logo.png}
+	\renewcommand{\backgroundPath}{src/NWPU/background.png}
+}
+
+\DeclareOption{CQU}{
+  \renewcommand{\maincolorRGB}{2, 82, 159}  % the theme's main color in RGB
+  \renewcommand{\colorlogoPath}{src/CQU/color-logo.png}  % path to the logo image with background color
+  \renewcommand{\translogoPath}{src/CQU/trans-logo.png}  % path to the logo image with transparent background
+  \renewcommand{\backgroundPath}{src/CQU/background.png}  % path to the background image
+}
+
+\DeclareOption{dgut}{
+    \renewcommand{\maincolorRGB}{6, 120, 63}
+    \renewcommand{\colorlogoPath}{src/DGUT/color-logo.png}
+    \renewcommand{\translogoPath}{src/DGUT/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/DGUT/background.png}
+}
+
+\DeclareOption{zjut}{
+  \renewcommand{\maincolorRGB}{30, 79, 142}  % the theme's main color in RGB
+  \renewcommand{\colorlogoPath}{src/ZJUT/color-logo.png}  % path to the logo image with background color
+  \renewcommand{\translogoPath}{src/ZJUT/trans-logo.png}  % path to the logo image with transparent background
+  \renewcommand{\backgroundPath}{src/ZJUT/background.png}  % path to the background image
+}
+
+\DeclareOption{tnu}{
+  \renewcommand{\maincolorRGB}{182, 2, 3}  % the theme's main color in RGB
+  \renewcommand{\colorlogoPath}{src/TNU/color-logo.png}  % path to the logo image with background color
+  \renewcommand{\translogoPath}{src/TNU/trans-logo.png}  % path to the logo image with transparent background
+  \renewcommand{\backgroundPath}{src/TNU/background.png}  % path to the background image
+}
+
+\DeclareOption{zzu}{
+    \renewcommand{\maincolorRGB}{106, 18, 21}
+    \renewcommand{\colorlogoPath}{src/ZZU/color-logo.png}
+    \renewcommand{\translogoPath}{src/ZZU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/ZZU/background.png}
+}    
+
+\DeclareOption{xmu}{
+    \renewcommand{\maincolorRGB}{18, 46, 102}
+    \renewcommand{\colorlogoPath}{src/XMU/color-logo.png}
+    \renewcommand{\translogoPath}{src/XMU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/XMU/background.png}
+}
+
+\DeclareOption{bjtu}{
+  \renewcommand{\maincolorRGB}{54, 101, 193}  % the theme's main color in RGB
+  \renewcommand{\colorlogoPath}{src/BJTU/color-logo.png}  % path to the logo image with background color
+  \renewcommand{\translogoPath}{src/BJTU/trans-logo.png}  % path to the logo image with transparent background
+  \renewcommand{\backgroundPath}{src/BJTU/background.png}  % path to the background image
+}
+
+\DeclareOption{ouc}{
+  \renewcommand{\maincolorRGB}{1, 64, 153}  % the theme's main color in RGB
+  \renewcommand{\colorlogoPath}{src/OUC/color-logo.png}  % path to the logo image with background color
+  \renewcommand{\translogoPath}{src/OUC/trans-logo.png}  % path to the logo image with transparent background
+  \renewcommand{\backgroundPath}{src/OUC/background.png}  % path to the background image
+}
+
+\DeclareOption{cityu}{
+    \renewcommand{\maincolorRGB}{140, 40, 75}
+    \renewcommand{\colorlogoPath}{src/CityU/color-logo.png}
+    \renewcommand{\translogoPath}{src/CityU/trans-logo.png}
+    \renewcommand{\backgroundPath}{src/CityU/background.png}
+}
+
+\DeclareOption{shanghaitech}{
+  \renewcommand{\maincolorRGB}{139, 0, 0}  % the theme's main color in RGB
+  \renewcommand{\colorlogoPath}{src/SHTECH/color-logo.png}  % path to the logo image with background color
+  \renewcommand{\translogoPath}{src/SHTECH/trans-logo.png}  % path to the logo image with transparent background
+  \renewcommand{\backgroundPath}{src/SHTECH/background.png}  % path to the background image
+}
+
+\DeclareOption{thu}{
+    \renewcommand{\maincolorRGB}{98, 51, 123}
+    \renewcommand{\colorlogoPath}{src/THU/color-logo.png}
+    \renewcommand{\translogoPath}{src/THU/color-logo.png}
+    \renewcommand{\backgroundPath}{src/THU/background.png}
+}
+
+\ProcessOptions\relax
+
+% --- typeset & elements settings ---
+% force 16:9 aspect ratio
+\geometry{paperwidth=16cm,paperheight=9cm}
+
+% logo
+\pgfdeclareimage[width=\logoWidth\paperwidth]{colorlogo}{\colorlogoPath}
+\pgfdeclareimage[width=\logoWidth\paperwidth]{translogo}{\translogoPath}
+\newcommand{\@makelogo}{colorlogo}
+
+\setbeamertemplate{headline}{}
+
+% color
+\definecolor{maincolor}{RGB}{\maincolorRGB}
+\definecolor{hhuNavy}{RGB}{0, 42, 80}
+\definecolor{hhuCyan}{RGB}{0, 151, 181}
+\definecolor{hhuGold}{RGB}{210, 154, 55}
+\definecolor{hhuMist}{RGB}{239, 247, 251}
+\definecolor{hhuLine}{RGB}{214, 229, 240}
+\definecolor{hhuInk}{RGB}{28, 40, 53}
+\definecolor{hhuMuted}{RGB}{99, 115, 129}
+\definecolor{airforceblue}{RGB}{60, 123, 164}
+\definecolor{morelightgray}{RGB}{244, 248, 251}
+\definecolor{darkred}{RGB}{139,0,0}
+\definecolor{darkblue}{RGB}{0,51,102}
+
+\newcommand{\themecolor}[1]{
+    \ifstrequal{#1}{colorbg}{
+        \renewcommand{\@makelogo}{translogo}
+        \setbeamercolor{normal text}{fg=white, bg=maincolor}
+        \setbeamercolor{structure}{fg=white}
+    }{
+        \renewcommand{\@makelogo}{colorlogo}
+        \setbeamercolor{normal text}{fg=hhuInk, bg=white}
+        \setbeamercolor{structure}{fg=maincolor}
+    }
+}
+\themecolor{white} % default: white theme
+% P.S. Beamer colors should be set in the preamble. It often works fine in the document itself, but NOT for normal text foreground. Thus \themecolor should only be called from the preamble
+
+\setbeamercolor{title}{fg=hhuNavy, bg=}
+\setbeamercolor{alerted text}{fg=maincolor}
+\setbeamercolor{subtitle}{fg=hhuMuted}
+\setbeamercolor{author}{fg=hhuInk}
+\setbeamercolor{date}{fg=hhuMuted}
+\setbeamercolor{frametitle}{fg=hhuNavy, bg=}
+\setbeamercolor{framesubtitle}{fg=hhuMuted, bg=}
+\setbeamercolor{footline}{fg=hhuMuted, bg=}
+
+% font
+\setmainfont{Arial}
+\setsansfont{Arial}
+\setmonofont{Arial}
+\renewcommand{\familydefault}{\sfdefault}
+\usefonttheme{professionalfonts}
+
+\AtEndOfPackage{%
+  \setbeamerfont{title}{series=\bfseries, size=\Large}
+}
+
+\setbeamerfont{subtitle}{series=\mdseries, size=\large}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{date}{size=\small}
+
+\setbeamerfont{frametitle}{series=\bfseries, size=\Large}
+\setbeamerfont{framesubtitle}{series=\mdseries, size=\small}
+\setbeamerfont{footline}{size=\scriptsize}
+\setbeamersize{text margin left=7mm,text margin right=7mm}
+\newfontfamily{\HHUBrandFont}{Arial}
+
+% no navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% footline
+\newcommand{\@footlinepayoff}{Hohai University}
+\setbeamertemplate{footline}{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[hhuMist] (current page.south west) rectangle ([yshift=0.34cm]current page.south east);
+        \fill[maincolor] (current page.south west) rectangle ([xshift=0.23\paperwidth,yshift=0.34cm]current page.south west);
+    \end{tikzpicture}
+    \begin{beamercolorbox}[wd=\paperwidth, ht=0.34cm, dp=0.08cm, leftskip=0.62cm, rightskip=0.62cm]{footline}
+        \usebeamerfont{footline}
+        \textcolor{white}{\@footlinepayoff}\hfill
+        \textcolor{hhuMuted}{\insertshorttitle}\hspace{0.45cm}
+        \textcolor{maincolor}{\insertframenumber/\inserttotalframenumber}
+    \end{beamercolorbox}
+}
+
+\newcommand{\footlinecolor}[1]{
+    % if #1 is empty, makes footline transparent
+    \ifstrempty{#1}{
+        \renewcommand{\@footlinepayoff}{}
+        \setbeamercolor{footline}{bg=}
+    }{
+        \renewcommand{\@footlinepayoff}{Hohai University}
+        \setbeamercolor{footline}{fg=white, bg=#1}
+    }
+}
+\footlinecolor{} % default: no footline
+
+% block
+\setbeamertemplate{blocks}[default]
+\setbeamerfont{block title}{size=\normalsize, series=\bfseries}
+\setbeamerfont{block body}{size=\small}
+\setbeamercolor{block title}{fg=white, bg=maincolor}
+\setbeamercolor{block body}{fg=hhuInk, bg=hhuMist}
+
+% alerted block
+\setbeamerfont{block title alerted}{size=\normalsize, series=\bfseries}
+\setbeamerfont{block body alerted}{size=\small}
+\setbeamercolor{block title alerted}{fg=white, bg=hhuGold}
+\setbeamercolor{block body alerted}{fg=hhuInk, bg=hhuGold!14}
+
+% example block
+\setbeamerfont{block title example}{size=\normalsize, series=\bfseries}
+\setbeamerfont{block body example}{size=\small}
+\setbeamercolor{block title example}{fg=white, bg=hhuCyan}
+\setbeamercolor{block body example}{fg=hhuInk, bg=hhuCyan!10}
+
+% bullets
+\setbeamertemplate{itemize item}{\raisebox{0.15ex}{\small\textcolor{maincolor}{\ensuremath{\blacktriangleright}}}}
+\setbeamertemplate{itemize subitem}{\textcolor{hhuCyan}{\textendash}}
+\setbeamertemplate{itemize subsubitem}{\ensuremath{\circ}}
+
+% table of cotents
+\setbeamertemplate{section in toc}{$\blacktriangleright$~\inserttocsection}  % section name format
+\setbeamertemplate{subsection in toc}{}  % don't present subsection
+\setbeamerfont{section in toc}{size=\large, series=\bfseries}  % section name font size
+
+% code bolck setting
+\definecolor{codegreen}{RGB}{101,218,120}
+\definecolor{darkgreen}{RGB}{93,158,82}
+\definecolor{darkyellow}{RGB}{245,194,105}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{airforceblue},
+    keywordstyle=\color{maincolor}\bfseries,
+    numberstyle=\scriptsize\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\fontspec{Arial}\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    xleftmargin=10pt,
+    xrightmargin=10pt,
+}
+
+\lstset{style=mystyle}
+
+% theorems
+\setbeamertemplate{theorems}[numbered]
+
+% --- section & frame setting ---
+% subsection
+\newcommand{\strsubsec}{Section \thesection.\thesubsection}
+
+% presents subtitle on each frame
+\makeatletter
+    \pretocmd\beamer@checkframetitle{%
+        \ifnum\value{section}>0
+            \framesubtitle{\thesection \, \secname}%
+        \else
+            \framesubtitle{}%
+        \fi
+    }
+\makeatother
+
+% avoid numbering of frames that are breaked into multiply slides
+\setbeamertemplate{frametitle continuation}{}
+
+% section page with the current section highlighted
+\AtBeginSection[]
+{
+    \begingroup
+    \setbeamertemplate{footline}{}
+    \begin{frame}[plain]
+        \begin{tikzpicture}[remember picture, overlay]
+            \fill[maincolor] (current page.south west) rectangle (current page.north east);
+            \fill[hhuNavy] (current page.south west) rectangle ([xshift=0.26\paperwidth]current page.north west);
+            \fill[hhuGold] ([xshift=0.26\paperwidth]current page.south west) rectangle ([xshift=0.265\paperwidth]current page.north west);
+            \node[anchor=center, opacity=0.12] at ([xshift=0.64\paperwidth,yshift=-0.50\paperheight]current page.north west)
+                {\includegraphics[width=0.32\paperwidth]{\hhuEmblemPath}};
+            \node[anchor=south west] at ([xshift=0.48cm,yshift=0.50cm]current page.south west)
+                {\includegraphics[width=0.18\paperwidth]{\hhuWordmarkPath}};
+        \end{tikzpicture}
+        \vspace*{2.15cm}
+        \hspace*{3.25cm}
+        \begin{minipage}{0.56\textwidth}
+            {\color{hhuGold}\bfseries\large Section \thesection}\par
+            \vspace{0.25cm}
+            {\color{white}\bfseries\LARGE \secname}\par
+            \vspace{0.38cm}
+            {\color{white!78}\rule{2.3cm}{1pt}}
+        \end{minipage}
+    \end{frame}
+    \endgroup
+}
+
+% subsection title page
+\AtBeginSubsection[]
+{
+    \begin{frame}{\,}{\thesection \, \secname}
+        \fontfamily{ptm}\selectfont
+        \centering\textsl{\textbf{\textcolor{maincolor}{
+            \large Section \thesection.\thesubsection
+            \vskip15pt
+            \LARGE \subsecname
+        }}}
+    \end{frame}
+}
+
+% --- page elements ---
+% frame title & subtitle layout
+\setbeamertemplate{frametitle}{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[hhuMist] (current page.north west) rectangle ([yshift=-1.34cm]current page.north east);
+        \fill[maincolor] (current page.north west) rectangle ([xshift=0.20\paperwidth,yshift=-1.34cm]current page.north west);
+        \fill[hhuGold] ([xshift=0.20\paperwidth]current page.north west) rectangle ([xshift=0.205\paperwidth,yshift=-1.34cm]current page.north west);
+        \node[anchor=west, inner sep=0pt, text=white, font=\HHUBrandFont\bfseries\fontsize{7.4}{8.6}\selectfont] at ([xshift=0.34cm,yshift=-0.56cm]current page.north west)
+            {HOHAI UNIVERSITY};
+    \end{tikzpicture}
+    \vspace*{-0.02cm}
+    \begin{beamercolorbox}[wd=\textwidth, ht=1.12cm, dp=0.12cm]{frametitle}
+        \hspace*{3.50cm}%
+        \begin{minipage}{0.70\paperwidth}
+            \usebeamerfont{frametitle}\insertframetitle\\[-1pt]
+            {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+        \end{minipage}
+    \end{beamercolorbox}
+}
+
+% title page
+\setbeamertemplate{title page}{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[white] (current page.south west) rectangle (current page.north east);
+        \fill[maincolor] (current page.south west) rectangle ([xshift=0.43\paperwidth]current page.north west);
+        \fill[hhuGold] ([xshift=0.43\paperwidth]current page.south west) rectangle ([xshift=0.435\paperwidth]current page.north west);
+        \node[anchor=north west, opacity=0.16] at ([xshift=0.55cm,yshift=-0.75cm]current page.north west)
+            {\includegraphics[width=0.31\paperwidth]{\hhuEmblemPath}};
+        \node[anchor=south west] at ([xshift=0.55cm,yshift=0.58cm]current page.south west)
+            {\includegraphics[width=0.29\paperwidth]{\hhuWordmarkPath}};
+        \node[anchor=north east, opacity=0.10] at ([xshift=-0.55cm,yshift=-0.55cm]current page.north east)
+            {\includegraphics[width=0.22\paperwidth]{\hhuEmblemPath}};
+    \end{tikzpicture}
+    \vspace*{1.85cm}
+    \hspace*{6.55cm}
+    \begin{minipage}{0.55\textwidth}
+        \raggedright
+        {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle}\par
+        \vspace{0.26cm}
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle}\par
+        \vspace{0.56cm}
+        {\color{hhuGold}\rule{1.35cm}{1.4pt}}\par
+        \vspace{0.38cm}
+        {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor}\par
+        \vspace{0.16cm}
+        {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate}
+    \end{minipage}
+}
+
+\renewcommand{\maketitle}{
+    \begingroup
+        \setbeamertemplate{footline}{}
+        \setbeamertemplate{headline}{}
+        \setbeamertemplate{background}{}
+        \begin{frame}
+            \titlepage
+        \end{frame}
+    \endgroup
+}
+
+% Q&A page
+\newcommand{\QApage}{
+    \begingroup
+        \setbeamertemplate{footline}{}
+        \themecolor{colorbg}
+        
+        \begin{frame}{}
+            \begin{tikzpicture}[remember picture, overlay]
+                \fill[maincolor] (current page.south west) rectangle (current page.north east);
+                \fill[hhuNavy] (current page.south west) rectangle ([xshift=0.24\paperwidth]current page.north west);
+                \fill[hhuGold] ([xshift=0.24\paperwidth]current page.south west) rectangle ([xshift=0.245\paperwidth]current page.north west);
+                \node[anchor=center, opacity=0.10] at ([xshift=0.68\paperwidth,yshift=-0.48\paperheight]current page.north west)
+                    {\includegraphics[width=0.34\paperwidth]{\hhuEmblemPath}};
+                \node[anchor=south west] at ([xshift=0.45cm,yshift=0.48cm]current page.south west)
+                    {\includegraphics[width=0.17\paperwidth]{\hhuWordmarkPath}};
+            \end{tikzpicture}
+            \vspace*{2.55cm}
+            \hspace*{2.95cm}
+            \begin{minipage}{0.58\textwidth}
+                \usebeamercolor[fg]{normal text}
+                {\Huge\bfseries Q\&A}\par
+                \vspace{0.3cm}
+                {\large \qaStr}
+            \end{minipage}
+        \end{frame}
+    \endgroup
+}
+
+% bibliography page
+\newcommand{\bibliographpage}{
+    \section{References}
+
+    \begingroup
+    \themecolor{colorbg}
+    \begin{frame}[allowframebreaks]{References}{\,}
+        \scriptsize
+        \printbibliography[heading=none]
+    \end{frame}
+\endgroup
+}
+
+% --- commands ---
+% set colored hyperlinks command
+\newcommand{\bhref}[2]{\textcolor{airforceblue}{\href{#1}{#2}}}
+
+% centering paragraph statement
+\newcommand{\centerstate}[1]{
+    \centering
+    \begin{columns}
+        \begin{column}{0.8\textwidth}
+            #1
+        \end{column}
+    \end{columns}
+}
+
+\newcommand{\tbf}[1]{\texttt{\textcolor{airforceblue}{[#1]}}}
+
+% coloured textbf
+\newcommand{\ctextbf}[1]{\textbf{\textcolor{maincolor}{#1}}}
+\newcommand{\btextbf}[1]{\textbf{\textcolor{airforceblue}{#1}}}
+
+% coloured textsl
+\newcommand{\ctextsl}[1]{\textsl{\textcolor{maincolor}{#1}}}
+\newcommand{\btextsl}[1]{\textsl{\textcolor{airforceblue}{#1}}}
+
+% coloured emph
+\newcommand{\cemph}[1]{\emph{\textcolor{maincolor}{#1}}}
+\newcommand{\bemph}[1]{\emph{\textcolor{airforceblue}{#1}}}
+
+% coloured texttt
+\newcommand{\ctexttt}[1]{\texttt{\textcolor{maincolor}{#1}}}
+\newcommand{\btexttt}[1]{\texttt{\textcolor{airforceblue}{#1}}}
